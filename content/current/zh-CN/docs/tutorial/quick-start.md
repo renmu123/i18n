@@ -34,7 +34,7 @@ my-electron-app/
 
 让我们根据上面的结构创建一个基本的应用程序。
 
-#### Install Electron
+#### 安装 Electron
 
 为您的项目创建一个文件夹并安装Electron：
 
@@ -85,12 +85,12 @@ app.on('activate', () => {
 1. 第1行：为了管理您应用程序的生命周期事件，以及创建和控制浏览器窗口，您从 `electron` 软件包导入了 `app` 和 `BrowserWindow`模块 。
 2. Line 3: After that, you define a function that creates a [new browser window](../api/browser-window.md#new-browserwindowoptions) with node integration enabled, loads `index.html` file into this window (line 12, we will discuss the file later).
 3. 第 15 行：你通过调用 ` createWindow `方法，在 electron app 第一次[被初始化](../api/app.md#appwhenready)时创建了一个新的窗口。
-4. 第 17 行：您添加了一个新的侦听器，当应用程序不再有任何打开窗口时试图退出。 因为操作系统 [窗口管理行为](https://support.apple.com/en-ca/guide/mac-help/mchlp2469/mac) ，此监听器在 macOS 上是禁止操作的。
+4. 第 17 行：您添加了一个新的侦听器，当应用程序不再有任何打开窗口时试图退出。 因为操作系统 [窗口管理行为](https://support.apple.com/zh-cn/guide/mac-help/mchlp2469/mac) ，此监听器在 macOS 上是禁止操作的。
 5. 第 23 行：您添加一个新的侦听器，只有当应用程序激活后没有可见窗口时，才能创建新的浏览器窗口。 例如，在首次启动应用程序后，或重新启动已在运行的应用程序。
 
 #### 创建网页
 
-这是应用程序初始化后您想要显示的页面。 此网页代表渲染过程。 您可以创建多个浏览器窗口，每个窗口都使用自己的独立渲染器。 每个窗口都可以通过 `节点集成` 首选项完全访问Node.js API。
+这是应用程序初始化后您想要显示的页面。 此网页代表渲染过程。 您可以创建多个浏览器窗口，每个窗口都使用自己的独立渲染器。 每个窗口都可以通过 `nodeIntegration` 首选项完全访问 Node.js API。
 
 `index.html` 页面如下所示：
 
@@ -127,11 +127,11 @@ app.on('activate', () => {
 }
 ```
 
-> 注意：如果删除 `个主` 字段，Electron 将尝试加载一个 `索引。 s` 文件从目录中包含 `package.json`
+> 注意：如果未设置 `main` 字段，Electron 将尝试加载包含在 `package.json` 文件目录中的 `index.js` 文件。
 
-> NOTE: The `author` and `description` fields are required for packaging, otherwise error will occur when running `npm run make`.
+> 注意: `author` 和 `description` 字段对于打包来说是必要的，不然当运行 `npm run make` 命令时会报错。
 
-默认情况下， `npm start` 命令将以 Node.js 运行主脚本。 要使用 Electron 运行脚本，您需要将其更改为这样：
+默认情况下， `npm start` 命令将用 Node.js 来运行主脚本。要使用 Electron 运行脚本，您需要将其更改为这样：
 
 ```json
 {
@@ -158,7 +158,7 @@ npm start
 
 ### 打包并分发应用程序
 
-分发您新创建的应用的最简单和最快方式是使用 [Electron Forge](https://www.electronforge.io)
+最简单和快捷来分发您新创建的应用是使用 [Electron Forge](https://www.electronforge.io)
 
 1. 导入 Electron Forge 到您的应用文件夹：
 
@@ -177,7 +177,7 @@ npm start
     Thanks for using "electron-forge"!!!
     ```
 
-1. 创建一个分发版本：
+2. 创建一个分发版本：
 
     ```sh
     npm run make
@@ -207,29 +207,29 @@ npm start
 
 ## 学习基础知识
 
-本节指导您了解 Electron 如何在内部工作的基本知识。 其目的是加强关于Electron和早些时候在Quickstart 部分创建的应用程序的知识。
+本节指导您了解 Electron 如何在内部工作的基本知识。 其目的是加强关于 Electron 和早些时候在 Quickstart 部分创建的应用程序的知识。
 
 ### 应用程序结构
 
-Electron由三个主要支柱组成：
+Electron 由三个主要支柱组成：
 
 * **Chromium** 用于显示网页内容。
 * **Node.js** 用于本地文件系统和操作系统。
 * **自定义 APIs** 用于使用经常需要的 OS 本机函数。
 
-与 Electron 开发应用程序就像构建一个带有网页界面的Node.js 应用程序或构建无缝集成的网页。
+用 Electron 开发应用程序就像构建一个带有网页界面的 Node.js 应用程序或构建无缝集成的网页。
 
-#### 主进程和渲染器进程
+#### 主进程和渲染进程
 
-如前所述，Electron有两种工艺：主要工艺和Rendererer。
+如前所述，Electron 有两种进程：主进程和渲染进程。
 
-* 主进程 **通过创建 `浏览器窗口` 实例来创建** 个网页。 每一个 `浏览窗口` 实例在其渲染过程中运行网页. 当一个 `BrowserWindow` 实例被摧毁时，对应的渲染过程也被终止。
-* 主进程 **管理所有** 个网页及其对应的渲染过程。
+* 主进程通过**创建** `BrowserWindow` 实例来创建 网页。 每一个 `BrowserWindow` 实例在其渲染过程中运行网页，当一个 `BrowserWindow` 实例被销毁时，对应的渲染过程也被终止。
+* 主进程**管理**所有网页及其对应的渲染进程。
 
 ----
 
-* 渲染进程 **只能管理** 个相应的网页。 在一个渲染过程中崩溃不会影响其他渲染过程。
-* 渲染进程 **通过IPC 与主进程通信** 在网页上执行GUI操作。 由于安全考虑和可能的资源泄漏，直接从渲染器过程中调用与本地GUI有关的API受到限制。
+* 渲染进程只能**管理**相应的网页，一个渲染进程的崩溃不会影响其他渲染进程。
+* 渲染进程通过 IPC 与主进程**通信** 在网在页上执行 GUI 操作。 出于安全和可能的资源泄漏考虑，直接从渲染器进程中调用与本地 GUI 有关的 API 受到限制。
 
 ----
 
@@ -239,22 +239,22 @@ Electron由三个主要支柱组成：
 
 ##### Electron API
 
-Electron API是根据流程类型分配的。 这意味着某些模块可以从主程序或渲染程序中使用，有些模块可以从两者中使用。 Electron 的 API 文档指明了每个模块可以使用的过程。
+Electron API 是根据流程类型分配的。这意味着某些模块可以在主进程或渲染进程中使用，有些模块两者中皆可使用。 Electron 的 API 文档指明了每个模块可以使用的过程。
 
-例如，要在两个进程中访问 Electron API，需要它包含的模块：
+例如，需要同时在两个进程中访问 Electron API，require 包含的模块：
 
 ```js
 const electron = require('electron')
 ```
 
-若要创建一个窗口，请调用 `浏览窗口` 类，只能在主进程中使用：
+若要创建一个窗口，请调用 `BrowserWindow` 类，但只能在主进程中使用：
 
 ```js
 const { BrowserWindow } = require('electron')
 const win = new BrowserWindow()
 ```
 
-若要从渲染器调用主流程，请使用 IPC 模块：
+若要从渲染进程调用主进程，请使用 IPC 模块：
 
 ```js
 // 在主进程中
@@ -266,19 +266,19 @@ ipcMain.handle('exper-action', (evidence, ...args) =>
 ```
 
 ```js
-// 在渲染过程中
+// 在渲染进程中
 const { ipcRenderer } = require('electron')
 
 ipcRender.invotrake('exper-action', ...args)
 ```
 
-> 注意：由于渲染过程可能会运行不受信任的代码(特别是第三方的代码)， 重要的是要认真验证主要进程中提出的请求。
+> 注意：由于渲染进程可能会运行不受信任的代码(特别是第三方的代码)，需要仔细确认前往主进程的请求。
 
 ##### Node.js API
 
-> 注意：要从渲染过程中访问Node.js API，您需要设置 ` nodeIntegration ` 选项为 `true`。
+> 注意：要从渲染进程中访问 Node.js API，需要设置 ` nodeIntegration ` 选项为 `true`。
 
-Electron 在主流程和渲染流程中显示对 Node.js API及其模块的完全访问权限。 例如，您可以从根目录读取所有文件：
+Electron 在主进程和渲染进程中都暴露了对 Node.js API 及其模块的完全访问权限。 例如，您可以从根目录读取所有文件：
 
 ```js
 const fs = require('fs')
@@ -288,13 +288,13 @@ const root = fs.readdirSync('/')
 console.log(root)
 ```
 
-要使用Node.js模块，您首先需要安装它作为依赖：
+要使用 Node.js 模块，您首先需要安装它作为依赖：
 
 ```sh
 npm install --save aws-sdk
 ```
 
-然后，在您的 Electron 应用程序中，需要模块：
+然后，在您的 Electron 应用程序中，进行 `require`：
 
 ```js
 const S3 = require('aws-sdk/clients/s3')
